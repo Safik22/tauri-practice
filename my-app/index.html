@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Controller</title>
+    <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Audio Controller</h1>
+        
+        <div class="audio-controls">
+            <!-- Отображение текущего состояния -->
+            <div class="volume-display">
+                <span id="volume-text">Volume: 50%</span>
+                <span id="mute-status" class="mute-indicator unmuted">🔊 Unmuted</span>
+            </div>
+
+            <!-- Слайдер громкости -->
+            <div class="slider-container">
+                <label for="volume-slider">Volume Control:</label>
+                <input type="range" id="volume-slider" min="0" max="100" value="50" class="volume-slider">
+                <span id="volume-value">50%</span>
+            </div>
+
+            <!-- Кнопки управления -->
+            <div class="button-container">
+                <button id="mute-btn" class="mute-button">Mute</button>
+                <button id="refresh-btn" class="refresh-button">Refresh</button>
+            </div>
+
+            <!-- Визуализатор громкости -->
+            <div class="volume-visualizer">
+                <div class="volume-bar">
+                    <div id="volume-fill" class="volume-fill" style="width: 50%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
