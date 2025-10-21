@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
+
 
 // Элементы DOM
 let volumeSlider: HTMLInputElement;  // слайдер громкости
@@ -10,25 +10,25 @@ let muteStatus: HTMLElement;         // статус muted/unmuted
 
 // Интерфейс для состояния аудио
 interface AudioState {
-    volume: number;
+    volume_percent: number;
     is_muted: boolean;
 }
 
 // Загрузка начального состояния
 async function loadAudioState() {
     try {
-        const audioState = await invoke<AudioState>('get_audio_state');
+        const audioState = await invoke<AudioState>('get_audio_state_command');
         updateUI(audioState);
     } catch (error) {
         console.error('Failed to load audio state:', error);
         // Заглушка для тестирования
-        updateUI({ volume: 50, is_muted: false });
+        updateUI({ volume_percent: 50, is_muted: false });
     }
 }
 
 // Обновление UI на основе состояния
 function updateUI(state: AudioState) {
-    const volume = state.volume;
+    const volume = state.volume_percent;
     const isMuted = state.is_muted;
 
     // Обновляем слайдер и текстовые значения
@@ -55,8 +55,9 @@ function updateUI(state: AudioState) {
 // Установка громкости
 async function setVolume(volume: number) {
     try {
-        const newState = await invoke<AudioState>('set_volume', { volume });
-        updateUI(newState);
+        await invoke('set_volume_command', { volumePercent: volume });
+        // После установки громкости обновляем состояние
+        await loadAudioState();
     } catch (error) {
         console.error('Failed to set volume:', error);
     }
@@ -65,9 +66,10 @@ async function setVolume(volume: number) {
 // Переключение mute/unmute
 async function toggleMute() {
     try {
-        const currentState = await invoke<AudioState>('get_audio_state');
-        const newState = await invoke<AudioState>('set_mute', { mute: !currentState.is_muted });
-        updateUI(newState);
+        const currentState = await invoke<AudioState>('get_audio_state_command');
+        await invoke('set_mute_command', { mute: !currentState.is_muted });
+        // После переключения mute обновляем состояние
+        await loadAudioState();
     } catch (error) {
         console.error('Failed to toggle mute:', error);
     }
