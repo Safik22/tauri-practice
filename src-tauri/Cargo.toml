@@ -25,4 +25,4 @@ windows = { version = "0.62", features = [
   "Win32_Devices_FunctionDiscovery"
 ] }
 thiserror = "2"
-
+anyhow = "1.0"
