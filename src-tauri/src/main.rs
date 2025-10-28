@@ -2,6 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 mod audio;
 mod audio_observer;
+mod power;
+mod shutdown_privilege;
 
 use audio_observer::{VolumeObserverState, start_volume_observer_manual};
 use tauri::{Manager, Listener};
@@ -29,6 +31,9 @@ fn main() {
             audio::get_audio_state_command,
             audio::set_volume_command,
             audio::set_mute_command,
+            power::sleep_command,
+            power:: reboot_command,
+            power:: shutdown_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri app");
